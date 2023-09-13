@@ -14,6 +14,10 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
+from sklearn.svm import SVC
+from sklearn.neural_network import MLPClassifier
+from sklearn.metrics import accuracy_score, classification_report
+
 from src.exception import CustomException
 from src.logger import logging
 
@@ -45,7 +49,9 @@ class ModelTrainer:
                 "K-Neighbors Classifier" : KNeighborsClassifier(),
                 "XGBClassifier": XGBClassifier(),
                 "CatBoosting Classifier": CatBoostClassifier(verbose=False),
-                "AdaBoost Classifier": AdaBoostClassifier()
+                "AdaBoost Classifier": AdaBoostClassifier(),
+                "SVM": SVC(),
+                "Neural Network (MLP)": MLPClassifier()
             }
 
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
@@ -64,7 +70,7 @@ class ModelTrainer:
             logging.info(best_model_name)
 
             if best_model_score<0.6:
-                raise CustomException("No best model found")
+                raise Exception("No best model found")
             logging.info(f"best found model on both training and testing dataset")
 
             save_object(
