@@ -125,6 +125,13 @@ class DataTransformation:
             
             test_arr=np.c_[input_feature_test_arr,np.array(target_feature_test_df)]
 
+            # Applied SMOTE to handle imbalance data
+            smote = SMOTE(random_state=42)
+            X_train_res, y_train_res = smote.fit_resample(train_arr[:, :-1], train_arr[:, -1])
+
+            # Combine resampled features with target
+            train_arr = np.c_[X_train_res, y_train_res]
+
             logging.info(f"saved preprocessing object.")
 
             save_object(

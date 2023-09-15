@@ -35,17 +35,19 @@ class ModelTrainer:
     def initiate_model_trainer(self,train_array,test_array):
         try:
             logging.info("Split training and test input data")
+            logging.info(train_array,test_array)
             X_train,y_train,X_test,y_test=(
                 train_array[:,:-1],
                 train_array[:,-1],
                 test_array[:,:-1],
                 test_array[:,-1]
             )
+            
+            logging.info(X_test,y_test)
             models = {
                 "Random Forest": RandomForestClassifier(),
                 "Decision Tree": DecisionTreeClassifier(),
                 "Gradient Boosting" : GradientBoostingClassifier(),
-                "Linear Regression" : LinearRegression(),
                 "K-Neighbors Classifier" : KNeighborsClassifier(),
                 "XGBClassifier": XGBClassifier(),
                 "CatBoosting Classifier": CatBoostClassifier(verbose=False),
@@ -53,10 +55,59 @@ class ModelTrainer:
                 "SVM": SVC(),
                 "Neural Network (MLP)": MLPClassifier()
             }
+            logging.info("hyperparameter is started")
+            params={
+                "Decision Tree": {
+                'criterion': ['gini', 'entropy'],
+                'max_depth': [None, 5, 10, 20],
+                'min_samples_split': [2, 5, 10]
+                },
+                "Random Forest": {
+                'n_estimators': [50, 100, 200],
+                'max_depth': [None, 5, 10, 20],
+                'min_samples_split': [2, 5, 10],
+                'min_samples_leaf': [1, 2, 4],
+                'max_features': ['auto', 'sqrt', 'log2']
+                },
+                "Gradient Boosting": {
+                'n_estimators': [50, 100, 200],
+                'learning_rate': [0.1, 0.05, 0.01],
+                'max_depth': [3, 4, 5],
+                'min_samples_split': [2, 5, 10]
+                },
+                "XGBoost": {
+                'n_estimators': [50, 100, 200],
+                'max_depth': [3, 4, 5],
+                'learning_rate': [0.1, 0.05, 0.01],
+                'subsample': [0.8, 1.0],
+                'colsample_bytree': [0.8, 1.0]
+                },
+                "CatBoosting Classifier": {
+                'depth': [6, 8, 10],
+                'learning_rate': [0.01, 0.05, 0.1],
+                'iterations': [30, 50, 100]
+                },
+                "AdaBoost Classifier": {
+                'n_estimators': [50, 100, 200],
+                'learning_rate': [0.1, 0.05, 0.01]
+                },
+                "SVM": {
+                'C': [0.1, 1, 10],
+                'kernel': ['linear', 'rbf']
+                },
+                "Neural Network (MLP)": {
+                'hidden_layer_sizes': [(100,), (50, 50), (30, 30, 30)],
+                'alpha': [0.0001, 0.001, 0.01],
+                'learning_rate': ['constant', 'invscaling', 'adaptive']
+                },
+                "K-Neighbors Classifier": {
+                'n_neighbors': [3, 5, 7, 9]
+    }
+            }
 
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                            models=models)
-            
+                                            models=models,param=params)
+            logging.info(model_report)
             ## To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
 
