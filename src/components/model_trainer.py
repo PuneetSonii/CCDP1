@@ -34,8 +34,8 @@ class ModelTrainer:
 
     def initiate_model_trainer(self,train_array,test_array):
         try:
-            logging.info("Split training and test input data")
-            logging.info(train_array,test_array)
+            logging.info(f"Split training and test input data")
+            logging.info(f"train_array,test_array")
             X_train,y_train,X_test,y_test=(
                 train_array[:,:-1],
                 train_array[:,-1],
@@ -43,7 +43,7 @@ class ModelTrainer:
                 test_array[:,-1]
             )
             
-            logging.info(X_test,y_test)
+            logging.info(f"X_test,y_test")
             models = {
                 "Random Forest": RandomForestClassifier(),
                 "Decision Tree": DecisionTreeClassifier(),
@@ -55,33 +55,20 @@ class ModelTrainer:
                 "SVM": SVC(),
                 "Neural Network (MLP)": MLPClassifier()
             }
-            logging.info("hyperparameter is started")
-            params={
+            logging.info(f"hyperparameter is started")
+            param={
                 "Decision Tree": {
-                'criterion': ['gini', 'entropy'],
-                'max_depth': [None, 5, 10, 20],
-                'min_samples_split': [2, 5, 10]
+                'criterion': ['gini', 'entropy']
                 },
                 "Random Forest": {
-                'n_estimators': [50, 100, 200],
-                'max_depth': [None, 5, 10, 20],
-                'min_samples_split': [2, 5, 10],
-                'min_samples_leaf': [1, 2, 4],
-                'max_features': ['auto', 'sqrt', 'log2']
+                'n_estimators': [50, 100, 200]
                 },
                 "Gradient Boosting": {
                 'n_estimators': [50, 100, 200],
                 'learning_rate': [0.1, 0.05, 0.01],
-                'max_depth': [3, 4, 5],
                 'min_samples_split': [2, 5, 10]
                 },
-                "XGBoost": {
-                'n_estimators': [50, 100, 200],
-                'max_depth': [3, 4, 5],
-                'learning_rate': [0.1, 0.05, 0.01],
-                'subsample': [0.8, 1.0],
-                'colsample_bytree': [0.8, 1.0]
-                },
+                "Linear Regression":{},
                 "CatBoosting Classifier": {
                 'depth': [6, 8, 10],
                 'learning_rate': [0.01, 0.05, 0.1],
@@ -104,10 +91,14 @@ class ModelTrainer:
                 'n_neighbors': [3, 5, 7, 9]
     }
             }
+            
+            logging.info(f"hyperparameter done")
 
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                            models=models,param=params)
-            logging.info(model_report)
+                                            models=models,param=param)
+            
+            logging.info(f"model_report")
+
             ## To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
 
@@ -117,11 +108,11 @@ class ModelTrainer:
                 list(model_report.values()).index(best_model_score)
             ]
             best_model = models[best_model_name]
-            print(best_model_name)
-            logging.info(best_model_name)
+            
+            logging.info(f"best_model_name")
 
             if best_model_score<0.6:
-                raise Exception("No best model found")
+                raise CustomException(f"No best model found")
             logging.info(f"best found model on both training and testing dataset")
 
             save_object(
