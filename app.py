@@ -12,7 +12,7 @@ app=application
 
 @app.route('/')
 def index():
-    return render_template('index')
+    return render_template('index.html')
 
 @app.route('/predictdata',methods=['GET','POST'])
 def predict_datapoint():
@@ -24,9 +24,9 @@ def predict_datapoint():
     For rendering results on HTML GUI
     '''
     if request.method == 'POST':
-        gender = gender_encode(int(request.form.get['gender']))
-        education = education_encode(int(request.form.get['education']))
-        marital_status = marital_encode(int(request.form.get['marriage']))
+        gender = [int(request.form.get['gender'])]
+        education = [int(request.form.get['education'])]
+        marital_status = [int(request.form.get['marriage'])]
         age = [int(request.form.get['age'])]
         bal_limit = [int(request.form.get['limit_bal'])]
         rs_6 = [int(request.form.get['april_rs'])]
@@ -63,8 +63,7 @@ def predict_datapoint():
     predict_pipeline=predictPipeline()
     result=predict_pipeline.predict(pred_df)
     return render_template('home.html',results=results[0])
-    #result = ""
-    #if prediction == 1:
-    #  result = "This customer IS LIKELY TO DEFAULT next month."
-    #else:
-    #  result = "This customer IS NOT LIKELY TO DEFAULT next month."
+
+    
+if __name__ == "__main__":
+    app.run(host="0.0.0.0")
