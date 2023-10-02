@@ -6,7 +6,6 @@ pandas
 imblearn
 catboost
 xgboost
-torch
 lightgbm
 seaborn
 dill

@@ -2,6 +2,7 @@ import os
 import sys
 from src.exception import CustomException
 from src.logger import logging
+
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -26,7 +27,7 @@ class DataIngestion:
     def initiate_data_ingestion(self):
         logging.info("Entered the data ingestion method or component")
         try:
-            df = pd.read_csv("D:/CCDP/notebook/Credit_Card_2.csv")
+            df = pd.read_csv("J:/ccdp/notebook/Credit_Card_2.csv")
             logging.info('Read the dataset as dataframe')
 
             os.makedirs(os.path.dirname(self.ingestion_config.train_data_path),exist_ok=True)

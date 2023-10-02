@@ -2,6 +2,9 @@ import os
 import sys
 from dataclasses import dataclass
 
+from src.components.data_transformation import DataTransformation
+from src.components.data_transformation import DataTransformationConfig
+
 from catboost import CatBoostClassifier
 from sklearn.ensemble import(
     AdaBoostClassifier,
@@ -22,6 +25,7 @@ from src.exception import CustomException
 from src.logger import logging
 
 from src.utils import save_object,evaluate_models
+
 
 @dataclass
 class ModelTrainerConfig:
@@ -45,59 +49,27 @@ class ModelTrainer:
             
             logging.info(f"X_test,y_test")
             models = {
-                "Random Forest": RandomForestClassifier(),
-                "Decision Tree": DecisionTreeClassifier(),
-                "Gradient Boosting" : GradientBoostingClassifier(),
-                "K-Neighbors Classifier" : KNeighborsClassifier(),
-                "XGBClassifier": XGBClassifier(),
-                "CatBoosting Classifier": CatBoostClassifier(verbose=False),
-                "AdaBoost Classifier": AdaBoostClassifier(),
-                "SVM": SVC(),
-                "Neural Network (MLP)": MLPClassifier()
+                "Random Forest": RandomForestClassifier()
             }
             logging.info(f"hyperparameter is started")
-            param={
-                "Decision Tree": {
-                'criterion': ['gini', 'entropy']
-                },
+            
+            params={
                 "Random Forest": {
-                'n_estimators': [50, 100, 200]
-                },
-                "Gradient Boosting": {
-                'n_estimators': [50, 100, 200],
-                'learning_rate': [0.1, 0.05, 0.01],
-                'min_samples_split': [2, 5, 10]
-                },
-                "Linear Regression":{},
-                "CatBoosting Classifier": {
-                'depth': [6, 8, 10],
-                'learning_rate': [0.01, 0.05, 0.1],
-                'iterations': [30, 50, 100]
-                },
-                "AdaBoost Classifier": {
-                'n_estimators': [50, 100, 200],
-                'learning_rate': [0.1, 0.05, 0.01]
-                },
-                "SVM": {
-                'C': [0.1, 1, 10],
-                'kernel': ['linear', 'rbf']
-                },
-                "Neural Network (MLP)": {
-                'hidden_layer_sizes': [(100,), (50, 50), (30, 30, 30)],
-                'alpha': [0.0001, 0.001, 0.01],
-                'learning_rate': ['constant', 'invscaling', 'adaptive']
-                },
-                "K-Neighbors Classifier": {
-                'n_neighbors': [3, 5, 7, 9]
-    }
-            }
+                'n_estimators': [50, 100, 150],
+                'max_depth': [5, 10, 20],
+                'min_samples_split': [2, 5, 10],
+                'min_samples_leaf': [1, 2, 4],
+                'max_features': ['sqrt', 'log2']
+                }
+                }
+            
             
             logging.info(f"hyperparameter done")
 
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
-                                            models=models,param=param)
+                                            models=models,param=params)
             
-            logging.info(f"model_report")
+            logging.info(f"Model Report: {model_report}")
 
             ## To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
@@ -129,3 +101,4 @@ class ModelTrainer:
 
         except Exception as e:
             raise CustomException(e,sys)
+
