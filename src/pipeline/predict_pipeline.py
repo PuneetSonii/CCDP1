@@ -1,9 +1,9 @@
 import sys
+import os
 import pandas as pd
 from src.exception import CustomException
 from src.utils import load_object
 
-from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
 class PredictPipeline:
     def __init__(self):
@@ -11,7 +11,7 @@ class PredictPipeline:
 
     def predict(self,features):
         try:
-            model_path=os.path.join('notebook','ccdp.pkl')
+            model_path=os.path.join("artifacts","model.pkl")
             preprocessor_path=os.path.join('artifacts','preprocessor.pkl')
             print("Before Loading")
             model=load_object(file_path=model_path)
@@ -24,7 +24,7 @@ class PredictPipeline:
         except Exception as e:
             raise CustomException(e,sys)
 
-class CustomData:
+class CustomData():
     def __init__(self,
                 LIMIT_BAL:float,
                 SEX:int,
@@ -118,7 +118,7 @@ class CustomData:
                 "BILL_AMT4":[self.BILL_AMT4],
                 "BILL_AMT5":[self.BILL_AMT5],
                 "BILL_AMT6":[self.BILL_AMT6],
-                " PAY_AMT1":[self.PAY_AMT1],
+                "PAY_AMT1":[self.PAY_AMT1],
                 "PAY_AMT2":[self.PAY_AMT2],
                 "PAY_AMT3":[self.PAY_AMT3],
                 "PAY_AMT4":[self.PAY_AMT4],

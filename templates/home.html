@@ -1,8 +1,9 @@
-
+<!DOCTYPE html>
 <html >
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
 <head>
     <meta charset="UTF-8">
-    <title>credit details</title>
+    <title>Credit Details</title>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
 <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
@@ -11,26 +12,26 @@
 
 
 <style>
-body  
+body
 {
-	background-image:url("D:/CCDP/templates/images/SL-020622-4930-40.jpg");
-	background-image:url("D:/CCDP/templates/images/SL-020622-4930-40.jpg");
+	background-image:url('{{"templates/static/SL-020622-4930-40.jpg"}}');
 	background-size:cover;
-	position:relative;
+	background-repeat: repeat;
+	background-position:center center;
 	align-items:center;
 	justify-content:center;	
 }
 
 .predict
 {
-	color:white;	
+	color:rgb(9, 38, 49);	
 }
 
 .submit-button
 {
-	background-color:green;
+	background-color:rgb(172, 185, 172);
 	border:none;
-	color:white;
+	color:hsl(163, 59%, 72%);
 	text-align:center;
 	font-family:Tahoma;
 	font-size:16px;
@@ -49,7 +50,7 @@ body
 	background-color:yellow;
 }
 
-.result 
+.results
 {
     margin: auto;
     width: 35%;
@@ -319,7 +320,7 @@ body
 	
 	
 	<!--RESULT DISPLAY-->
-	<div class="result" align="center">
+	<div class="results" align="center">
 		{% if prediction==1 %}
 			<h2><p style="padding: 0.3%"><b>WILL DEFAULT!</b></p></h2>
 		{% elif prediction==0 %}
@@ -328,6 +329,5 @@ body
 	</div>
     </div>
 </div>
-
 </body>
 </html>
