@@ -8,7 +8,9 @@ import pandas as pd
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from sklearn.preprocessing import OrdinalEncoder, StandardScaler
+from sklearn.preprocessing import OneHotEncoder
+
 
 from src.exception import CustomException
 from src.logger import logging
@@ -44,12 +46,21 @@ class DataTransformation:
         self.data_transformation_config = DataTransformationConfig()
 
     def get_data_transformer_object(self):
-        numerical_columns = ["ID", "LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
+        numerical_columns = ["LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
                                 "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
                                 "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
 
         categorical_columns = ["SEX", "EDUCATION", "MARRIAGE"]
 
+        logging.info('Pipeline Initiated')
+
+        # Define the custom ranking for each ordinal variable
+        education_categories =['Graduation','University','High_School','Others']
+        marriage_categories = ['Married', 'Single', 'Others']
+
+        logging.info('Pipeline Initiated')
+        print(f"Education Categories: {education_categories}")
+        print(f"Marriage Categories: {marriage_categories}")
         num_pipeline = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="median")),
@@ -60,7 +71,8 @@ class DataTransformation:
         cat_pipeline = Pipeline(
             steps=[
                 ("imputer", SimpleImputer(strategy="most_frequent")),
-                ("one_hot_encoder", OneHotEncoder())
+                ("onehotencoder", OneHotEncoder(drop='first')),
+                ("scaler",StandardScaler(with_mean=False))
             ]
         )
 
@@ -70,7 +82,8 @@ class DataTransformation:
         preprocessor = ColumnTransformer(
             [
                 ("num_pipeline", num_pipeline, numerical_columns),
-                ("cat_pipelines", cat_pipeline, categorical_columns)
+                ("cat_pipelines", cat_pipeline, categorical_columns),
+                
             ]
         )
 
@@ -82,7 +95,9 @@ class DataTransformation:
             train_df = pd.read_csv(train_path)
             test_df = pd.read_csv(test_path)
 
-            logging.info("Read train and test data completed")
+            logging.info('Read train and test data completed')
+            logging.info(f'Train Dataframe Head : \n{train_df.head().to_string()}')
+            logging.info(f'Test Dataframe Head  : \n{test_df.head().to_string()}')
 
             logging.info("obtaining preprocessing object")
 
@@ -91,8 +106,8 @@ class DataTransformation:
             target_column_name = "default"
 
             numerical_columns = ["ID", "LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
-                                 "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
-                                 "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
+                                "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
+                                "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
 
             input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
             target_feature_train_df = train_df[target_column_name]
@@ -113,7 +128,7 @@ class DataTransformation:
             # Applied SMOTE to handle imbalance data
             smote = SMOTE(random_state=42)
             X_train_res, y_train_res = smote.fit_resample(train_arr[:, :-1], train_arr[:, -1])
-
+            logging.info(f"X_train_res,y_train_res")
             # Combine resampled features with target
             train_arr = np.c_[X_train_res, y_train_res]
 

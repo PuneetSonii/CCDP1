@@ -28,39 +28,42 @@ def index():
 @app.route('/predict_datapoint',methods=['GET','POST'])
 def predict_datapoint():
     if request.method=='POST':
-        #data=CustomData(
-        gender = (request.form['gender']),
-        education = [int(request.form['education'])],
-        marital_status = [int(request.form['marriage'])],
-        age = [int(request.form['age'])],
-        bal_limit = [float(request.form['limit_bal'])],
-        rs_6 = [int(request.form['april_rs'])],
-        rs_5 = [int(request.form['may_rs'])],
-        rs_4 = [int(request.form['june_rs'])],
-        rs_3 = [int(request.form['july_rs'])],
-        rs_2 = [int(request.form['august_rs'])],
-        rs_1 = [int(request.form['september_rs'])],
-        bill_6 = [int(request.form['bill_amt6'])],
-        bill_5 = [int(request.form['bill_amt5'])],
-        bill_4 = [int(request.form['bill_amt4'])],
-        bill_3 = [int(request.form['bill_amt3'])],
-        bill_2 = [int(request.form['bill_amt2'])],
-        bill_1 = [int(request.form['bill_amt1'])],
-        pay_6 = [int(request.form['pay_amt6'])],
-        pay_5 = [int(request.form['pay_amt5'])],
-        pay_4 = [int(request.form['pay_amt4'])],
-        pay_3 = [int(request.form['pay_amt3'])],
-        pay_2 = [int(request.form['pay_amt2'])],
-        pay_1 = [int(request.form['pay_amt1'])]
-        
+        data=CustomData(
+        SEX=int(request.form['gender']),
+        EDUCATION=int(request.form['education']),
+        MARRIAGE=int(request.form['marriage']),
+        AGE= int(request.form['age']),
+        LIMIT_BAL=float(request.form['limit_bal']),
+        PAY_1=int(request.form['april_rs']),
+        PAY_2=int(request.form['may_rs']),
+        PAY_3=int(request.form['june_rs']),
+        PAY_4=int(request.form['july_rs']),
+        PAY_5=int(request.form['august_rs']),
+        PAY_6=int(request.form['september_rs']),
+        BILL_AMT6=int(request.form['bill_amt6']),  
+        BILL_AMT5=int(request.form['bill_amt5']),  
+        BILL_AMT4=int(request.form['bill_amt4']),  
+        BILL_AMT3=int(request.form['bill_amt3']),  
+        BILL_AMT2=int(request.form['bill_amt2']),  
+        BILL_AMT1=int(request.form['bill_amt1']),  
+        PAY_AMT6=int(request.form['pay_amt6']),    
+        PAY_AMT5=int(request.form['pay_amt5']),    
+        PAY_AMT4=int(request.form['pay_amt4']),    
+        PAY_AMT3=int(request.form['pay_amt3']),    
+        PAY_AMT2=int(request.form['pay_amt2']),    
+        PAY_AMT1=int(request.form['pay_amt1'])
+        )
 
-    bill_amt_avg = [round(np.mean([bill_6, bill_5, bill_4, bill_3, bill_2, bill_1]), 2)]
-    features = rs_1 + rs_2 + pay_1 + bill_1
-    features = features + bal_limit + age + pay_2 + bill_2
-    features = features + pay_3 + bill_3 + bill_4 + pay_4
-    features = features + pay_6 + bill_5 + bill_6 + bill_amt_avg
+    bill_amt_avg = round(np.mean([data.BILL_AMT6, data.BILL_AMT5, data.BILL_AMT4, data.BILL_AMT3, data.BILL_AMT2, data.BILL_AMT1]), 2)
+    features = [data.PAY_6, data.PAY_5, data.PAY_AMT1, data.BILL_AMT1]
+    features += [data.LIMIT_BAL, data.AGE, data.PAY_AMT2, data.BILL_AMT2]
+    features += [data.PAY_AMT3, data.BILL_AMT3, data.BILL_AMT4, data.PAY_AMT4]
+    features += [data.PAY_AMT6, data.BILL_AMT5, data.BILL_AMT6, bill_amt_avg]
+
     
-    features_arr = [np.array(features)]
+    sum_of_features = sum(features)
+
+    features_arr = [np.array(features).reshape(1, -1)]
 
     pred_df=data.get_data_as_data_frame()
     print(pred_df)
