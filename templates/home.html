@@ -1,30 +1,28 @@
 <!DOCTYPE html>
 <html >
-<!--From https://codepen.io/frytyler/pen/EGdtg-->
+
 <head>
     <meta charset="UTF-8">
     <title>Credit Details</title>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 </head>
-
 
 <style>
 body
 {
-	background-image:url('{{"templates/static/SL-020622-4930-40.jpg"}}');
+	background-image:url("templates/static/trr.jpg");
 	background-size:cover;
-	background-repeat: repeat;
-	background-position:center center;
+	position:relative;
 	align-items:center;
-	justify-content:center;	
+	justify-content:center	
 }
 
 .predict
 {
-	color:rgb(9, 38, 49);	
+	color:#141313;	
 }
 
 .submit-button
@@ -161,6 +159,7 @@ body
 					<option value="8">8 Months Delay</option>
 					<option value="9">9 Months Delay and Above</option></select>
 			</div>
+
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="repay_status">May</label><br>
 				<!--<input name="pay_5" id="pay_5" min="-2" max="9" type="number" value="0" required>-->
@@ -256,10 +255,12 @@ body
 				<label for="bill_amount">April</label><br>
 				<input name="bill_amt6" id="bill_amt6" value="0" type="text" required>$
 			</div>
+
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="bill_amount">May</label><br>
 				<input name="bill_amt5" id="bill_amt5" value="0" type="text" required>$
 			</div>
+			
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="bill_amount">June</label><br>
 				<input name="bill_amt4" id="bill_amt4" value="0" type="text" required>$
