@@ -10,7 +10,7 @@ from sklearn.preprocessing import StandardScaler
 from src.pipeline.predict_pipeline import CustomData,PredictPipeline
 
 
-application=Flask(__name__)
+application=Flask(__name__,static_url_path='/D:/ccdp/templates/static/Star Landing.jpg')
 
 app=application
 
@@ -21,6 +21,7 @@ def index():
 @app.route('/predict_datapoint',methods=['GET','POST'])
 def predict_datapoint():
     if request.method=='POST':
+        print(request.form)
         data=CustomData(
         SEX=int(request.form['gender']),
         EDUCATION=int(request.form['education']),
@@ -60,12 +61,18 @@ def predict_datapoint():
 
     pred_df=data.get_data_as_data_frame()
     print(pred_df)
+    print("Before Prediction")
 
     predict_pipeline=PredictPipeline()
+    print("Mid Prediction")
+
+    result=predict_pipeline.predict(pred_df)
     
-    results=predict_pipeline.predict(pred_df)
+    # Convert the result to an integer (0 or 1)
+    prediction = int(result[0])
     
-    return render_template('home.html',results=results[0])
+
+    return render_template('home.html', result=result[0])
 
     
 if __name__ == "__main__":

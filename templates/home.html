@@ -1,35 +1,38 @@
 <!DOCTYPE html>
 <html >
-
+<!--From https://codepen.io/frytyler/pen/EGdtg-->
 <head>
     <meta charset="UTF-8">
-    <title>Credit Details</title>
+    <title>credit details</title>
     <link href='https://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
-	<link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Arimo' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Hind:300' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300' rel='stylesheet' type='text/css'>
 </head>
 
+
 <style>
-body
+body  
 {
-	background-image:url("templates/static/trr.jpg");
-	background-size:cover;
-	position:relative;
-	align-items:center;
-	justify-content:center	
+    background-image: url('D:/ccdp/templates/static/Star Landing.jpg');
+    background-size: cover;
+    position: relative;
+    align-items: center;
+    justify-content: center;
 }
+
+
 
 .predict
 {
-	color:#141313;	
+	color:white;	
 }
 
 .submit-button
 {
-	background-color:rgb(172, 185, 172);
+	background-color:green;
 	border:none;
-	color:hsl(163, 59%, 72%);
+	color:white;
 	text-align:center;
 	font-family:Tahoma;
 	font-size:16px;
@@ -40,7 +43,8 @@ body
 
 .submit-button:hover
 {
-	background-color:rgb(192, 45, 45);
+	background-color:red;
+	transition:0.7s:
 }
 
 .submit-button:active
@@ -48,7 +52,7 @@ body
 	background-color:yellow;
 }
 
-.results
+.result 
 {
     margin: auto;
     width: 35%;
@@ -58,10 +62,10 @@ body
 
 <body>
 <div class="pseudo">
-    <div class="predict">
+	<div class="predict">
 	<h1 style="margin: auto; width: 35%; padding: 0.5%; text-align: center;">Credit Card Defaulter Prediction</h2>
 
-        <!-- Main Input For Receiving Query to our ML -->
+    <!-- Main Input For Receiving Query to our ML -->
     <form action="{{ url_for('predict_datapoint')}}"method="post">
 		<fieldset style="float:left; height:450px; width:630px">
 			<!--<legend><b>Demographic data:</b></legend>-->
@@ -159,7 +163,6 @@ body
 					<option value="8">8 Months Delay</option>
 					<option value="9">9 Months Delay and Above</option></select>
 			</div>
-
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="repay_status">May</label><br>
 				<!--<input name="pay_5" id="pay_5" min="-2" max="9" type="number" value="0" required>-->
@@ -255,12 +258,10 @@ body
 				<label for="bill_amount">April</label><br>
 				<input name="bill_amt6" id="bill_amt6" value="0" type="text" required>$
 			</div>
-
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="bill_amount">May</label><br>
 				<input name="bill_amt5" id="bill_amt5" value="0" type="text" required>$
 			</div>
-			
 			<div style="float:left; margin-right: 1.5em;">
 				<label for="bill_amount">June</label><br>
 				<input name="bill_amt4" id="bill_amt4" value="0" type="text" required>$
@@ -321,14 +322,18 @@ body
 	
 	
 	<!--RESULT DISPLAY-->
-	<div class="results" align="center">
-		{% if prediction==1 %}
-			<h2><p style="padding: 0.3%"><b>WILL DEFAULT!</b></p></h2>
-		{% elif prediction==0 %}
-			<h2><p style="padding: 0.3%"><b>WILL NOT DEFAULT!</b></p></h2>
-		{% endif %}	
-	</div>
-    </div>
+	<h2>
+		
+		<div class="result" align="center">
+			{% if result == 1 %}
+				<h2><p style="padding: 0.3%"><b>WILL be DEFAULT!</b></p></h2>
+			{% elif result == 0 %}
+				<h2><p style="padding: 0.3%"><b>WILL NOT DEFAULT!</b></p></h2>
+			{% endif %}    
+		</div>
+	</h2>
 </div>
+</div>
+
 </body>
 </html>
