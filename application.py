@@ -14,13 +14,6 @@ application=Flask(__name__)
 
 app=application
 
-## route for a home page
-@app.route('D:/ccdp/templates/static/trr.jpg')
-def serve_file(filename):
-    return send_from_directory('static', filename)
-
-
-
 @app.route('/')
 def index():
     return render_template('home.html')
@@ -28,6 +21,7 @@ def index():
 @app.route('/predict_datapoint',methods=['GET','POST'])
 def predict_datapoint():
     if request.method=='POST':
+        print(request.form)
         data=CustomData(
         SEX=int(request.form['gender']),
         EDUCATION=int(request.form['education']),
@@ -72,11 +66,14 @@ def predict_datapoint():
     predict_pipeline=PredictPipeline()
     print("Mid Prediction")
 
-    results=predict_pipeline.predict(pred_df)
-    print("after Prediction")
+    result=predict_pipeline.predict(pred_df)
     
-    return render_template('home.html',results=results[0])
+    # Convert the result to an integer (0 or 1)
+    prediction = int(result[0])
+    
+
+    return render_template('home.html', result=result[0])
 
     
 if __name__ == "__main__":
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0",debug=True)
