@@ -7,7 +7,7 @@ import pickle
 from sklearn.metrics import recall_score
 from src.logger import logging
 
-from sklearn.model_selection import RandomizedSearchCV  # Changed import
+from sklearn.model_selection import GridSearchCV  
 from sklearn.metrics import r2_score
 
 from src.exception import CustomException
@@ -34,10 +34,10 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, param):
             logging.info(f"model fitting started")
             
             # Changed GridSearchCV to RandomizedSearchCV
-            rs = RandomizedSearchCV(model, para, cv=3, n_iter=3, random_state=42)
-            rs.fit(X_train, y_train)
+            gs = GridSearchCV(model, para, cv=3)
+            gs.fit(X_train, y_train)
 
-            model.set_params(**rs.best_params_)
+            model.set_params(**gs.best_params_)
             model.fit(X_train, y_train)
             logging.info(f"model fitting done")
 
@@ -46,8 +46,8 @@ def evaluate_models(X_train, y_train, X_test, y_test, models, param):
             y_test_pred = model.predict(X_test)
             logging.info(f"X_test test model")
             # Calculate recall
-            train_recall = recall_score(y_train, y_train_pred, average='binary')  # Change 'binary' if needed
-            test_recall = recall_score(y_test, y_test_pred, average='binary')  # Change 'binary' if needed
+            train_recall = recall_score(y_train, y_train_pred, average='binary')  
+            test_recall = recall_score(y_test, y_test_pred, average='binary') 
 
             report[list(models.keys())[i]] = test_recall
 

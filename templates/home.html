@@ -14,7 +14,7 @@
 <style>
 body  
 {
-    background-image: url('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQT9j4bhk-Zd1zNGUZlClOrpvIr3zxjAeMjNw&usqp=CAU');
+    background-image: url('https://img.freepik.com/free-photo/collage-finance-banner-concept_23-2150608848.jpg?w=1480&t=st=1700210458~exp=1700211058~hmac=108468fbdb7fb95bf9dca676049e537dfb10d8fdaa06cf7a4a0f357e63ef46c3');
     background-size: cover;
     position: relative;
     align-items: center;
@@ -66,7 +66,7 @@ body
 	<h1 style="margin: auto; width: 35%; padding: 0.5%; text-align: center;">Credit Card Defaulter Prediction</h2>
 
     <!-- Main Input For Receiving Query to our ML -->
-    <form action="{{ url_for('predict_datapoint')}}"method="post">
+    <form action="{{ url_for('predict_datapoint')}}" method="post">
 		<fieldset style="float:left; height:450px; width:630px">
 			<!--<legend><b>Demographic data:</b></legend>-->
 			<br>
@@ -322,18 +322,13 @@ body
 	
 	
 	<!--RESULT DISPLAY-->
-	<h2>
-		
-		<div class="result" align="center">
-			{% if result == 1 %}
-				<h2><p style="padding: 0.3%"><b>WILL be DEFAULT!</b></p></h2>
-			{% elif result == 0 %}
-				<h2><p style="padding: 0.3%"><b>WILL NOT DEFAULT!</b></p></h2>
-			{% endif %}    
-		</div>
-	</h2>
+<div class="result" align="center">
+    {% if result == 1 %}
+        <h2><p style="padding: 0.3%"><b>WILL DEFAULT!</b></p></h2>
+    {% elif result == 0 %}
+        <h2><p style="padding: 0.3%"><b>WILL NOT DEFAULT!</b></p></h2>
+    {% endif %}
 </div>
-</div>
-
+</div> 
 </body>
 </html>

@@ -15,12 +15,13 @@ from sklearn.linear_model import LogisticRegression
 from xgboost import XGBClassifier
 from sklearn.svm import SVC
 from sklearn.neural_network import MLPClassifier
-
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.neighbors import KNeighborsClassifier
 from src.exception import CustomException
 from src.logger import logging
 
 from src.utils import save_object,evaluate_models
-
+from sklearn.model_selection import cross_val_score, StratifiedKFold
 
 @dataclass
 class ModelTrainerConfig:
@@ -44,10 +45,14 @@ class ModelTrainer:
             
             logging.info(f"X_test,y_test")
             models = {
-                "Random Forest": RandomForestClassifier(),
+                "Random Forest": RandomForestClassifier(n_estimators=100,max_depth=10,random_state=42),
                 "Logistic Regression": LogisticRegression(solver="liblinear",max_iter=1000),
-                "SVM": SVC(),
-                "XGBoost": XGBClassifier(),
+                "SVM": SVC(max_iter=500,random_state=42),
+                "XGBoost": XGBClassifier(max_depth=5,random_state=42),
+                "CatBoost": CatBoostClassifier(random_state=42),  
+                "Decision Tree": DecisionTreeClassifier(random_state=42),  
+                "K-Nearest Neighbors": KNeighborsClassifier(),  
+                "Neural Network": MLPClassifier(max_iter=500, random_state=42)
                 
             }
             logging.info(f"hyperparameter is started")
@@ -77,10 +82,34 @@ class ModelTrainer:
             "SVM": {
                 'C': [0.1, 1, 10],
                 'kernel': ['linear', 'poly', 'rbf', 'sigmoid']
-            }}
-            
+            },
+            "CatBoost": {
+                'iterations': [50, 100, 150],
+                'learning_rate': [0.01, 0.1, 0.2],
+                'depth': [4, 6, 8],  
+                'l2_leaf_reg': [1, 3, 5],  
+            },
+            "Decision Tree": {
+                'max_depth': [None, 5, 10, 15],  
+                'min_samples_split': [2, 5, 10],  
+                'min_samples_leaf': [1, 2, 4],   
+            },
+            "K-Nearest Neighbors": {
+                'n_neighbors': [3, 5, 7],  
+                'weights': ['uniform', 'distance'],  
+                'algorithm': ['auto', 'ball_tree', 'kd_tree', 'brute'],  
+            },
+            "Neural Network": {
+                'hidden_layer_sizes': [(50,), (100,), (50, 50)],  
+                'activation': ['logistic', 'tanh', 'relu'],  
+                'solver': ['adam', 'lbfgs'],  
+                'alpha': [0.0001, 0.001, 0.01], 
+            }
+            }
             
             logging.info(f"hyperparameter done")
+
+            
 
             model_report:dict=evaluate_models(X_train=X_train,y_train=y_train,X_test=X_test,y_test=y_test,
                                             models=models,param=params)
@@ -90,14 +119,19 @@ class ModelTrainer:
             ## To get best model score from dict
             best_model_score = max(sorted(model_report.values()))
 
-            ## to get best model name from dict
+            # Sort the models based on their performance (descending order)
+            sorted_models = sorted(model_report.items(), key=lambda x: x[1], reverse=True)
 
+            # Log the models with automatically assigned numbers based on their score
+            for i, (model_name, model_score) in enumerate(sorted_models, start=1):
+                logging.info(f"{i}. {model_name} - Score: {model_score:.4f}")
+
+            ## to get best model name from dict
             best_model_name = list(model_report.keys())[
                 list(model_report.values()).index(best_model_score)
             ]
             best_model = models[best_model_name]
             
-            logging.info(f"best_model_name")
 
             if best_model_score<0.6:
                 raise CustomException(f"No best model found")
@@ -117,3 +151,6 @@ class ModelTrainer:
 
         except Exception as e:
             raise CustomException(e,sys)
+        
+
+    

@@ -77,6 +77,8 @@ class DataTransformation:
         )
 
         logging.info(f"Categorical columns: {categorical_columns}")
+        logging.info(f"Ordinal Categorical columns: {education_categories,marriage_categories}")
+
         logging.info(f"Numerical columns: {numerical_columns}")
 
         preprocessor = ColumnTransformer(
@@ -105,7 +107,7 @@ class DataTransformation:
 
             target_column_name = "default"
 
-            numerical_columns = ["ID", "LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
+            numerical_columns = ["LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
                                 "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
                                 "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
 
