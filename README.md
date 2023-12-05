@@ -11,17 +11,20 @@ We are all aware what is credit card. It is type of payment payment card in whic
 
 Credit card default happens when you have become severely delinquent on your credit card payments.Missing credit card payments once or twice does not count as a default. A payment default occurs when you fail to pay the Minimum Amount Due on the credit card for a few consecutive months.
 ```
-## Dataset Information
+## `Deployed in Docker`
+Link to the application : https://hub.docker.com/repository/docker/puneetsonii/creditpredict-app/general
+
+## `Dataset Information`
 This dataset contains information on default payments, demographic factors, credit data, history of payment, and bill statements of credit card clients in _Taiwan from April 2005 to September 2005_.
 
 The datasets has been provided by [Kaggle](https://www.kaggle.com/uciml/default-of-credit-card-clients-dataset). The original dataset can be found [here](https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients) at the UCI Machine Learning Repository. This project wouldn't have been possible without this dataset.
 
-## Installation
+## `Installation`
 The Code is written in Python 3.8 If you don't have Python installed you can find it [here](https://www.python.org/downloads/). If you are using a lower version of Python you can upgrade using the pip package, ensuring you have the latest version of pip. To install the required packages and libraries, run this command in the project directory after [cloning](https://www.howtogeek.com/451360/how-to-clone-a-github-repository/) the repository:
 ```bash
 pip install -r requirements.txt
 ```
-## Directory Tree 
+## `Directory Tree `
 ```
 
 ├── templates 
@@ -41,11 +44,11 @@ pip install -r requirements.txt
 └── requirements.txt
 ```
 
-## Technologies Used
+## `Technologies Used`
 
 ![image](https://user-images.githubusercontent.com/77207245/198870009-95368c87-f4b5-44cd-8385-c2ae7e81e992.png)
 
-## Watch the Demo here
+## `Watch the Demo here`
 [![image alt text](https://i9.ytimg.com/vi/oRO-gfVo-24/sddefault.jpg?v=656f1cbf&sqp=CNzSvKsG&rs=AOn4CLC4Pj5Tpy5kohlCePVlT8uqljqOIA)](https://youtu.be/oRO-gfVo-24)
 
 
