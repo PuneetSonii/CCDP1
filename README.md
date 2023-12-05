@@ -46,7 +46,7 @@ pip install -r requirements.txt
 ![image](https://user-images.githubusercontent.com/77207245/198870009-95368c87-f4b5-44cd-8385-c2ae7e81e992.png)
 
 ## Watch the Demo here
-[![image alt text](https://user-images.githubusercontent.com/77207245/198889458-fbcc7f7f-6026-496d-b951-cb5608b2afb0.PNG)](https://youtu.be/oRO-gfVo-24)
+[![image alt text](https://i9.ytimg.com/vi/oRO-gfVo-24/sddefault.jpg?v=656f1cbf&sqp=CNzSvKsG&rs=AOn4CLC4Pj5Tpy5kohlCePVlT8uqljqOIA)](https://youtu.be/oRO-gfVo-24)
 
 
 ```
