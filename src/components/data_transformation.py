@@ -1,7 +1,8 @@
 import sys
 import os
 from dataclasses import dataclass
-
+import matplotlib.pyplot as plt
+import seaborn as sns
 import pickle
 import numpy as np
 import pandas as pd
@@ -16,7 +17,7 @@ from src.exception import CustomException
 from src.logger import logging
 from src.utils import save_object
 
-from imblearn.over_sampling import SMOTE
+from imblearn.under_sampling import RandomUnderSampler
 # modelling
 from sklearn.metrics import mean_squared_error, r2_score
 from sklearn.neighbors import KNeighborsClassifier
@@ -103,13 +104,14 @@ class DataTransformation:
 
             logging.info("obtaining preprocessing object")
 
-            preprocessing_obj = self.get_data_transformer_object()
+            # Replace SMOTE with RandomUnderSampler
+            random_under_sampler = RandomUnderSampler(random_state=42)
 
             target_column_name = "default"
 
             numerical_columns = ["LIMIT_BAL", "AGE", "PAY_1", "PAY_2", "PAY_3", "PAY_4", "PAY_5", "PAY_6",
-                                "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
-                                "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
+                                  "BILL_AMT1", "BILL_AMT2", "BILL_AMT3", "BILL_AMT4", "BILL_AMT5", "BILL_AMT6",
+                                  "PAY_AMT1", "PAY_AMT2", "PAY_AMT3", "PAY_AMT4", "PAY_AMT5", "PAY_AMT6"]
 
             input_feature_train_df = train_df.drop(columns=[target_column_name], axis=1)
             target_feature_train_df = train_df[target_column_name]
@@ -119,22 +121,49 @@ class DataTransformation:
 
             logging.info(f"Applying preprocessing object on training dataframe and testing dataframe.")
 
+            preprocessing_obj = self.get_data_transformer_object()
+
             input_feature_train_arr = preprocessing_obj.fit_transform(input_feature_train_df)
+
+            logging.info(f"Shape of original training data: {input_feature_train_arr.shape}")
+            # Log the class distribution before random under-sampling for training data
+            logging.info("original training data of Class distribution OF DEFAULT column training data: %s", Counter(target_feature_train_df))
+
+            # Apply random under-sampling to handle imbalanced data for training data
+            X_train_res, y_train_res = random_under_sampler.fit_resample(input_feature_train_arr,
+                                                                            target_feature_train_df)
+
+            logging.info("After random under-sampling for training data:")
+            logging.info(f"Shape of balanced X_train_res after Random under Sampling: {X_train_res.shape}")
+            logging.info(f"Shape of balanced y_train_res after Random under Sampling: {y_train_res.shape}")
+            logging.info("Class distribution of DEFAULT column after random under-sampling for training data: %s", Counter(y_train_res))
+
             input_feature_test_arr = preprocessing_obj.transform(input_feature_test_df)
 
+            logging.info("Before random under-sampling for test data:")
+            logging.info("Class distribution before random under-sampling: %s", Counter(target_feature_test_df))
+
+            # Apply random under-sampling to handle imbalanced data for test data
+            X_test_res, y_test_res = random_under_sampler.fit_resample(input_feature_test_arr,
+                                                                        target_feature_test_df)
+
+            logging.info("After random under-sampling for test data:")
+            logging.info(f"Shape of balanced X_test_res after Random under Sampling: {X_test_res.shape}")
+            logging.info(f"Shape of balanced y_test_res after Random under Sampling: {y_test_res.shape}")
+            logging.info("Class distribution after random under-sampling for test data: %s", Counter(y_test_res))
+
+
+            # Plot the distribution of the target column after random under-sampling
+            plt.figure(figsize=(8, 6))
+            sns.countplot(x=target_feature_test_df)
+            plt.title(f'Distribution of {target_column_name} after Random Under-Sampling')
+            plt.show()
+
             train_arr = np.c_[
-                input_feature_train_arr, np.array(target_feature_train_df)]
+                X_train_res, np.array(y_train_res)
+            ]
 
-            test_arr = np.c_[input_feature_test_arr, np.array(target_feature_test_df)]
-
-            # Applied SMOTE to handle imbalance data
-            smote = SMOTE(random_state=42)
-            X_train_res, y_train_res = smote.fit_resample(train_arr[:, :-1], train_arr[:, -1])
-            logging.info("Shape of balanced X_train_res: %s", X_train_res.shape)
-            logging.info("Shape of balanced y_train_res: %s", y_train_res.shape)
-
-            # Combine resampled features with target
-            train_arr = np.c_[X_train_res, y_train_res]
+            test_arr = np.c_[X_test_res, np.array(y_test_res)]
 
             logging.info(f"Saved preprocessing object.")
 
