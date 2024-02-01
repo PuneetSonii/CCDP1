@@ -12,7 +12,8 @@ We are all aware what is credit card. It is type of payment payment card in whic
 Credit card default happens when you have become severely delinquent on your credit card payments.Missing credit card payments once or twice does not count as a default. A payment default occurs when you fail to pay the Minimum Amount Due on the credit card for a few consecutive months.
 ```
 ## `Deployed in Docker`
-Link to the application : https://hub.docker.com/repository/docker/puneetsonii/creditpredict-app/general
+Link to the application : http://192.168.103.8:5000
+
 
 ## `Dataset Information`
 This dataset contains information on default payments, demographic factors, credit data, history of payment, and bill statements of credit card clients in _Taiwan from April 2005 to September 2005_.
